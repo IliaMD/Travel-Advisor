@@ -7,14 +7,14 @@ import Rating from '@material-ui/lab';
 import useStyled from './styles';
 
 
-const Map = ( {setCoordinates, setBounds, coordinates} ) => {
+const Map = ( {setCoordinates, setBounds, coordinates, places} ) => {
     const classes = useStyled();
-    const isMobile = useMediaQuery(('min-width:600px'));
+    const isDesktop = useMediaQuery('(min-width:600px)');
 
 return ( 
     <div className={classes.mapContainer}>
         <GoogleMapReact
-        bootstrapURLKeys={{ key: 'AIzaSyB8yCP4NQ1Kcu4DsJLTV5DgtiXvGr-T89Q' }}
+        bootstrapURLKeys={{ key: 'AIzaSyBO5jO6k8xAgMh7FKBQI79m7VfaB8hBUR0' }}
         defaultCenter={coordinates}
         center={coordinates}
         defaultZoom={14}
@@ -26,7 +26,29 @@ return (
         }}
         onChildClick={''}
         >
-
+            {places?.map((place, i) =>(
+                <div
+                    className={classes.markerContainer}
+                    lat={Number(place.latitude)}
+                    lng={Number(place.longitude)}
+                    key={i} 
+                >
+                    {
+                        !isDesktop ? (
+                            <LocationOnOutlinedIcon color='primary' fontSize="large"/>
+                        ) : (
+                            <Paper elevation={3} className={classes.paper}>
+                                <Typography className={classes.typography} variant="subtitle" gutterBottom>{place.name}</Typography>
+                                <img 
+                                className={classes.pointer}
+                                src={place.photo ? place.photo.images.large.url : 'https://www.foodserviceandhospitality.com/wp-content/uploads/2016/09/Restaurant-Placeholder-001.jpg'}
+                                alt={place.name}
+                                />
+                            </Paper>
+                        )
+                    }
+                </div>
+            ))}
         </GoogleMapReact>
         
 
